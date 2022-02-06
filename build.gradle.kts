@@ -14,6 +14,7 @@ repositories {
 
 dependencies {
     implementation("org.apache.camel:camel-core:3.14.0")
+    implementation("org.apache.camel:camel-jackson:3.14.0")
     implementation("org.apache.camel:camel-main:3.14.0")
     implementation("org.apache.camel:camel-netty-http:3.14.0")
     implementation("org.apache.camel:camel-rest:3.14.0")

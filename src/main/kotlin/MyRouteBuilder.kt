@@ -1,4 +1,7 @@
 import org.apache.camel.builder.RouteBuilder
+import org.apache.camel.model.rest.RestBindingMode
+
+data class Item(val name: String, val quality: Int)
 
 class MyRouteBuilder() : RouteBuilder() {
 
@@ -9,16 +12,17 @@ class MyRouteBuilder() : RouteBuilder() {
 
         restConfiguration()
             .component("netty-http")
-            .host("localhost").port(8080)
+            .host("localhost")
+            .port(8080)
+            .bindingMode(RestBindingMode.json)
 
         from("rest:get:hello")
             .transform().constant("Bye World");
 
-        from("rest:post:item")
-            .process {
-                println(it.message.body)
-                println(it.message.headers)
-            }
+        rest("/items/")
+            .post()
+            .outType(Class.forName("Item"))
+            .to("stream:out")
     }
 
 }
