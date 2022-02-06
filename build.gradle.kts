@@ -15,6 +15,8 @@ repositories {
 dependencies {
     implementation("org.apache.camel:camel-core:3.14.0")
     implementation("org.apache.camel:camel-main:3.14.0")
+    implementation("org.apache.camel:camel-netty-http:3.14.0")
+    implementation("org.apache.camel:camel-rest:3.14.0")
     implementation("org.apache.camel:camel-stream:3.14.0")
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")

@@ -6,6 +6,13 @@ class MyRouteBuilder() : RouteBuilder() {
         from("timer:foo?repeatCount=1?")
             .setBody(constant("Hello, Camel!"))
             .to("stream:out")
+
+        restConfiguration()
+            .component("netty-http")
+            .host("localhost").port(8080)
+
+        from("rest:get:hello")
+            .transform().constant("Bye World");
     }
 
 }
