@@ -1,0 +1,17 @@
+[{
+  "name": "Apple",
+  "quality": 98
+},
+  {
+    "name": "Banana",
+    "quality": 74
+  },
+  {
+    "name": "Iron Ore",
+    "quality": 80
+  },
+  {
+    "name": "Whale Bone",
+    "quality": 33
+  }
+]

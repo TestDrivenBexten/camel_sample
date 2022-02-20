@@ -1,7 +1,9 @@
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.apache.camel.builder.RouteBuilder
+import org.apache.camel.component.file.GenericFile
 import org.apache.camel.model.rest.RestBindingMode
+import java.io.File
 
 data class Item(val name: String, val quality: Int)
 
@@ -25,10 +27,10 @@ class MyRouteBuilder() : RouteBuilder() {
 
         rest("/items/")
             .post()
-            .outType(Array<Item>::class.java)
-            .to("direct:item")
+            .outType(String::class.java)
+            .to("direct:parseItemList")
 
-        from("direct:item")
+        from("direct:parseItemList")
             .process { exchange ->
                 val rawItemList = exchange.message.body as List<ItemMap>
                 val itemList = rawItemList.map { item ->
@@ -39,6 +41,18 @@ class MyRouteBuilder() : RouteBuilder() {
                 }
                 exchange.message.body = itemList
             }
+            .to("direct:item")
+
+        from("file:sample_json")
+            .convertBodyTo(String::class.java)
+            .process {
+                val rawJson = it.message.body as String
+                val itemList = Gson().fromJson(rawJson, Array<Item>::class.java).toList()
+                it.message.body = itemList
+            }
+            .to("direct:item")
+
+        from("direct:item")
             .split(body())
                 .choice()
                     .`when` { (it.message.body as Item).quality > 90 }
