@@ -1,3 +1,5 @@
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.rest.RestBindingMode
 
@@ -21,8 +23,21 @@ class MyRouteBuilder() : RouteBuilder() {
 
         rest("/items/")
             .post()
-            .outType(Class.forName("Item"))
-            .to("stream:out")
+            .outType(Array<Item>::class.java)
+            .to("direct:item")
+
+        from("direct:item")
+            .process { exchange ->
+                val rawItemList = exchange.message.body as List<LinkedHashMap<String, Any>>
+                val itemList = rawItemList.map { item ->
+                    Item(
+                        name = item["name"] as String,
+                        quality = item["quality"] as Int,
+                    )
+                }
+//                val itemList = Gson().fromJson(rawJson, Array<Item>::class.java).toList()
+                println(itemList)
+            }
     }
 
 }

@@ -13,6 +13,7 @@ repositories {
 }
 
 dependencies {
+    implementation("com.google.code.gson:gson:2.9.0")
     implementation("org.apache.camel:camel-core:3.14.0")
     implementation("org.apache.camel:camel-jackson:3.14.0")
     implementation("org.apache.camel:camel-main:3.14.0")
