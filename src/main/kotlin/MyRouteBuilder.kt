@@ -5,6 +5,8 @@ import org.apache.camel.model.rest.RestBindingMode
 
 data class Item(val name: String, val quality: Int)
 
+typealias ItemMap = LinkedHashMap<String, Any>
+
 class MyRouteBuilder() : RouteBuilder() {
 
     override fun configure() {
@@ -28,7 +30,7 @@ class MyRouteBuilder() : RouteBuilder() {
 
         from("direct:item")
             .process { exchange ->
-                val rawItemList = exchange.message.body as List<LinkedHashMap<String, Any>>
+                val rawItemList = exchange.message.body as List<ItemMap>
                 val itemList = rawItemList.map { item ->
                     Item(
                         name = item["name"] as String,
