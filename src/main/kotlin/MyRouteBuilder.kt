@@ -37,8 +37,25 @@ class MyRouteBuilder() : RouteBuilder() {
                         quality = item["quality"] as Int,
                     )
                 }
-//                val itemList = Gson().fromJson(rawJson, Array<Item>::class.java).toList()
-                println(itemList)
+                exchange.message.body = itemList
+            }
+            .split(body())
+                .choice()
+                    .`when` { (it.message.body as Item).quality > 90 }
+                        .to("direct:storage")
+                    .otherwise().to("direct:trashbin")
+                .end()
+
+        from("direct:storage")
+            .process {
+                val item = it.message.body as Item
+                println("Good quality item ${item.name} stored")
+            }
+
+        from("direct:trashbin")
+            .process {
+                val item = it.message.body as Item
+                println("Low quality item ${item.name} tossed")
             }
     }
 
