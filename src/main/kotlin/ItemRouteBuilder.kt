@@ -10,7 +10,7 @@ data class CamelError(val body: Any, val headerList: List<CamelHeader>)
 
 typealias ItemMap = LinkedHashMap<String, Any>
 
-class MyRouteBuilder : RouteBuilder() {
+class ItemRouteBuilder : RouteBuilder() {
 
     override fun configure() {
         from("direct:parseItemList")

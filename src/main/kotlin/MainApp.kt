@@ -11,7 +11,7 @@ fun main(args: Array<String>) {
     println("\n\n\n\n");
 
     val main = Main()
-    main.configure().addRoutesBuilder(MyRouteBuilder())
+    main.configure().addRoutesBuilder(ItemRouteBuilder())
     main.configure().addRoutesBuilder(ErrorRouteBuilder())
     main.configure().addRoutesBuilder(RestRouteBuilder())
     main.run(args)
