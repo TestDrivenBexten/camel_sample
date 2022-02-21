@@ -10,7 +10,7 @@ class RestRouteBuilder : RouteBuilder() {
             .bindingMode(RestBindingMode.json)
 
         from("rest:get:hello")
-            .transform().constant("Bye World")
+            .transform().constant("Hello World")
 
         rest("/items/")
             .post()
