@@ -13,5 +13,6 @@ fun main(args: Array<String>) {
     val main = Main()
     main.configure().addRoutesBuilder(MyRouteBuilder())
     main.configure().addRoutesBuilder(ErrorRouteBuilder())
+    main.configure().addRoutesBuilder(RestRouteBuilder())
     main.run(args)
 }
