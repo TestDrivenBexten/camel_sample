@@ -31,8 +31,21 @@ class StarshipRouteBuilder: RouteBuilder() {
             }
             .process {
                 // Check for updates in this processor
+                val todayShipList = it.message.headers["TodayShipList"] as List<Starship>
                 val shipRecordList = it.message.headers["ShipRecordList"] as List<StarshipRecord>
                 println(shipRecordList)
             }
     }
+}
+
+typealias ShipKey = Long
+// Old record to expire and new record to create
+typealias ShipUpdate = Pair<ShipKey, Starship>
+data class ShipUpdateResult(
+    val newShipList: List<Starship>,
+    val updateShipList: List<ShipUpdate>
+)
+
+fun checkIfShipUpdated(ship1: Starship, ship2: Starship): Boolean {
+    return ship1 != ship2
 }
