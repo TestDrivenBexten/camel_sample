@@ -1,4 +1,5 @@
 import org.apache.camel.main.Main
+import starships.StarshipRouteBuilder
 
 /**
  * A static main() so we can easily run these routing rules in our IDE
@@ -16,6 +17,7 @@ fun main(args: Array<String>) {
     main.configure().addRoutesBuilder(DataSetRouteBuilder())
 //    main.configure().addRoutesBuilder(ItemRouteBuilder())
 //    main.configure().addRoutesBuilder(ErrorRouteBuilder())
+    main.configure().addRoutesBuilder(StarshipRouteBuilder())
     main.configure().addRoutesBuilder(RestRouteBuilder())
     main.run(args)
 }

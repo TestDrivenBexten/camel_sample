@@ -21,9 +21,5 @@ class RestRouteBuilder : RouteBuilder() {
             .post()
             .outType(String::class.java)
             .to("direct:throwError")
-
-        rest("/updateShips/")
-            .post()
-            .to("direct:updateShipTable")
     }
 }
