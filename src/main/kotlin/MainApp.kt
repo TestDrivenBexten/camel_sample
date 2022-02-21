@@ -14,8 +14,8 @@ fun main(args: Array<String>) {
     main.bind("itemDataSet", buildItemDataSet())
 
     main.configure().addRoutesBuilder(DataSetRouteBuilder())
-    main.configure().addRoutesBuilder(ItemRouteBuilder())
-    main.configure().addRoutesBuilder(ErrorRouteBuilder())
+//    main.configure().addRoutesBuilder(ItemRouteBuilder())
+//    main.configure().addRoutesBuilder(ErrorRouteBuilder())
     main.configure().addRoutesBuilder(RestRouteBuilder())
     main.run(args)
 }
