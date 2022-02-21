@@ -1,18 +1,18 @@
 import com.google.gson.Gson
+import org.apache.camel.builder.DeadLetterChannelBuilder
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.rest.RestBindingMode
 
 data class Item(val name: String, val quality: Int)
 
+typealias CamelHeader = Pair<String, Any?>
+data class CamelError(val body: Any, val headerList: List<CamelHeader>)
+
 typealias ItemMap = LinkedHashMap<String, Any>
 
-class MyRouteBuilder() : RouteBuilder() {
+class MyRouteBuilder : RouteBuilder() {
 
     override fun configure() {
-        // from("timer:foo?repeatCount=1?")
-        //     .setBody(constant("Hello, Camel!"))
-        //     .to("stream:out")
-
         restConfiguration()
             .component("netty-http")
             .host("localhost")
@@ -20,12 +20,17 @@ class MyRouteBuilder() : RouteBuilder() {
             .bindingMode(RestBindingMode.json)
 
         from("rest:get:hello")
-            .transform().constant("Bye World");
+            .transform().constant("Bye World")
 
         rest("/items/")
             .post()
             .outType(String::class.java)
             .to("direct:parseItemList")
+
+        rest("/throwError/")
+            .post()
+            .outType(String::class.java)
+            .to("direct:throwError")
 
         from("direct:parseItemList")
             .process { exchange ->
