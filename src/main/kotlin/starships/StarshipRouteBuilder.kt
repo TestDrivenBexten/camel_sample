@@ -2,6 +2,37 @@ package starships
 
 import org.apache.camel.builder.RouteBuilder
 
+private class SaveStarshipRouteBuilder: RouteBuilder() {
+    override fun configure() {
+        from("direct:saveStarship")
+            .process {
+                val shipUpdateResult = it.message.body as ShipUpdateResult
+                it.message.body = shipUpdateResult.newShipList
+            }
+            .split(body())
+            .process {
+                val newShip = it.message.body as Starship
+                println("Saving new ship record U.S.S. ${newShip.name} ${newShip.serialNumber}")
+            }
+    }
+}
+
+private class UpdateStarshipRouteBuilder: RouteBuilder() {
+    override fun configure() {
+        from("direct:updateStarship")
+            .process {
+                val shipUpdateResult = it.message.body as ShipUpdateResult
+                it.message.body = shipUpdateResult.updateShipList
+            }
+            .split(body())
+            .process {
+                val (shipKey, newShip) = it.message.body as ShipUpdate
+                println("Updating ship record for U.S.S. ${newShip.name} ${newShip.serialNumber} ")
+                println("Expiring ship record $shipKey")
+            }
+    }
+}
+
 class StarshipRouteBuilder: RouteBuilder() {
     override fun configure() {
         /*
@@ -12,6 +43,8 @@ class StarshipRouteBuilder: RouteBuilder() {
                 b. If updated, send update to database
          */
         context.registry.bind("todayShip", buildTodayShipDataSet())
+        context.addRoutes(SaveStarshipRouteBuilder())
+        context.addRoutes(UpdateStarshipRouteBuilder())
 
         from("dataset:todayShip")
             .process {
@@ -34,8 +67,12 @@ class StarshipRouteBuilder: RouteBuilder() {
                 val todayShipList = it.message.headers["TodayShipList"] as List<Starship>
                 val shipRecordList = it.message.headers["ShipRecordList"] as List<StarshipRecord>
                 val shipUpdateResult = parseShipUpdates(todayShipList, shipRecordList)
-                println(shipUpdateResult)
+                it.message.body = shipUpdateResult
             }
+            .multicast()
+            .to("direct:saveStarship")
+            .to("direct:updateStarship")
+            .end()
     }
 }
 
