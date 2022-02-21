@@ -11,6 +11,9 @@ fun main(args: Array<String>) {
     println("\n\n\n\n");
 
     val main = Main()
+    main.bind("itemDataSet", buildItemDataSet())
+
+    main.configure().addRoutesBuilder(DataSetRouteBuilder())
     main.configure().addRoutesBuilder(ItemRouteBuilder())
     main.configure().addRoutesBuilder(ErrorRouteBuilder())
     main.configure().addRoutesBuilder(RestRouteBuilder())
