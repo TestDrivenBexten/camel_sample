@@ -9,6 +9,7 @@ data class Starship(
 )
 
 data class StarshipRecord(
+    val shipKey: Long?,
     val starship: Starship,
     val currentDate: LocalDate,
     val expirationDate: LocalDate?

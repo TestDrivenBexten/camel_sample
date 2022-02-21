@@ -33,12 +33,13 @@ class StarshipRouteBuilder: RouteBuilder() {
                 // Check for updates in this processor
                 val todayShipList = it.message.headers["TodayShipList"] as List<Starship>
                 val shipRecordList = it.message.headers["ShipRecordList"] as List<StarshipRecord>
-                println(shipRecordList)
+                val shipUpdateResult = parseShipUpdates(todayShipList, shipRecordList)
+                println(shipUpdateResult)
             }
     }
 }
 
-typealias ShipKey = Long
+typealias ShipKey = Long?
 // Old record to expire and new record to create
 typealias ShipUpdate = Pair<ShipKey, Starship>
 data class ShipUpdateResult(
@@ -46,6 +47,23 @@ data class ShipUpdateResult(
     val updateShipList: List<ShipUpdate>
 )
 
-fun checkIfShipUpdated(ship1: Starship, ship2: Starship): Boolean {
-    return ship1 != ship2
+fun parseShipUpdates(shipList: List<Starship>,
+                     recordList: List<StarshipRecord>): ShipUpdateResult {
+    fun foldShipResult(acc: ShipUpdateResult, next: Starship): ShipUpdateResult {
+        val shipRecord = recordList.find { it.starship.serialNumber == next.serialNumber }
+        return if (shipRecord != null) {
+            if(shipRecord.starship != next) {
+                val updatePair = Pair(shipRecord.shipKey, next)
+                val updateList = acc.updateShipList + updatePair
+                acc.copy(updateShipList=updateList)
+            } else {
+                acc
+            }
+        } else {
+            val newShipList = acc.newShipList + next
+            acc.copy(newShipList=newShipList)
+        }
+    }
+    val emptyShipUpdateResult = ShipUpdateResult(listOf(), listOf())
+    return shipList.fold(emptyShipUpdateResult, ::foldShipResult)
 }
