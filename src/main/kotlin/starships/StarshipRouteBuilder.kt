@@ -48,7 +48,7 @@ class StarshipRouteBuilder: RouteBuilder() {
 
         from("dataset:todayShip")
             .process {
-                println(it.message.body)
+                println("Queried today's ship records")
                 val shipList = it.message.body as List<Starship>
                 it.message.headers["TodayShipList"] = shipList
             }
