@@ -1,9 +1,6 @@
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import org.apache.camel.builder.RouteBuilder
-import org.apache.camel.component.file.GenericFile
 import org.apache.camel.model.rest.RestBindingMode
-import java.io.File
 
 data class Item(val name: String, val quality: Int)
 
