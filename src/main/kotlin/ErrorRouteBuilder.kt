@@ -1,6 +1,7 @@
 import org.apache.camel.builder.DeadLetterChannelBuilder
 import org.apache.camel.builder.RouteBuilder
 
+// Dead Letter Channel
 val ERROR_HANDLER = DeadLetterChannelBuilder("direct:error")
     .onExceptionOccurred {
         val body = it.message.body
