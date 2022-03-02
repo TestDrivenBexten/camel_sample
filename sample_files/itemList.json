@@ -1,7 +1,8 @@
-[{
-  "name": "Apple",
-  "quality": 98
-},
+[
+  {
+    "name": "Apple",
+    "quality": 98
+  },
   {
     "name": "Banana",
     "quality": 74

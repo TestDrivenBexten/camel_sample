@@ -14,10 +14,10 @@ fun main(args: Array<String>) {
     val main = Main()
     main.bind("itemDataSet", buildItemDataSet())
 
-    main.configure().addRoutesBuilder(DataSetRouteBuilder())
-//    main.configure().addRoutesBuilder(ItemRouteBuilder())
-//    main.configure().addRoutesBuilder(ErrorRouteBuilder())
-    main.configure().addRoutesBuilder(StarshipRouteBuilder())
+//    main.configure().addRoutesBuilder(DataSetRouteBuilder())
+    main.configure().addRoutesBuilder(ItemRouteBuilder())
+    main.configure().addRoutesBuilder(ErrorRouteBuilder())
+//    main.configure().addRoutesBuilder(StarshipRouteBuilder())
     main.configure().addRoutesBuilder(RestRouteBuilder())
     main.run(args)
 }
