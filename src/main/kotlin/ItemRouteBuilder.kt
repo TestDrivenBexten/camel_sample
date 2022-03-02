@@ -39,23 +39,17 @@ class ItemRouteBuilder : RouteBuilder() {
             .to("direct:item")
 
         from("direct:item")
-            .split(body())
-                .choice()
-                    .`when` { (it.message.body as Item).quality > 90 }
-                        .to("direct:storage")
-                    .otherwise().to("direct:trashbin")
-                .end()
 
         from("direct:storage")
             .process {
                 val item = it.message.body as Item
-                println("Good quality item ${item.name} stored")
+                println("Good quality, ${item.quality}, item ${item.name} stored")
             }
 
         from("direct:trashbin")
             .process {
                 val item = it.message.body as Item
-                println("Low quality item ${item.name} tossed")
+                println("Low quality, ${item.quality}, item ${item.name} tossed")
             }
     }
 
