@@ -25,6 +25,9 @@ class ItemRouteBuilder : RouteBuilder() {
                 exchange.message.body = itemList
             }
             .to("direct:item")
+            .process { exchange ->
+                exchange.message.body = "Item posting finished"
+            }
 
         from("file:sample_json")
             .convertBodyTo(String::class.java)
