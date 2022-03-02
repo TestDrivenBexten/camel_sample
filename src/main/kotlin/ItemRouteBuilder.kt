@@ -39,6 +39,13 @@ class ItemRouteBuilder : RouteBuilder() {
             .to("direct:item")
 
         from("direct:item")
+            .split(body())
+                .choice()
+                    .`when` { (it.message.body as Item).quality > 90 }
+                        .to("direct:storage")
+                    .otherwise().to("direct:trashbin")
+                .end()
+
 
         from("direct:storage")
             .process {
